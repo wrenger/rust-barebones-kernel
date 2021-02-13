@@ -1,13 +1,3 @@
-/*
- * Rust BareBones OS
- * - By John Hodge (Mutabah/thePowersGang) 
- *
- * logging.rs
- * - Debug output using rust's core::fmt system
- *
- * This code has been put into the public domain, there are no restrictions on
- * its use, and the author takes no liability.
- */
 use core::sync::atomic;
 use core::fmt;
 
@@ -24,15 +14,15 @@ impl Writer
 {
 	/// Obtain a logger for the specified module
 	pub fn get(module: &str) -> Writer {
-		// This "acquires" the lock (actually just disables output if paralel writes are attempted
+		// This "acquires" the lock (actually just disables output if parallel writes are attempted
 		let mut ret = Writer( ! LOGGING_LOCK.swap(true, atomic::Ordering::Acquire) );
-		
+
 		// Print the module name before returning (prefixes all messages)
 		{
 			use core::fmt::Write;
 			let _ = write!(&mut ret, "[{}] ", module);
 		}
-		
+
 		ret
 	}
 }
@@ -44,7 +34,7 @@ impl ::core::ops::Drop for Writer
 		// Write a terminating newline before releasing the lock
 		{
 			use core::fmt::Write;
-			let _ = write!(self, "\n");
+			let _ = writeln!(self);
 		}
 		// On drop, "release" the lock
 		if self.0 {
@@ -61,10 +51,21 @@ impl fmt::Write for Writer
 		if self.0
 		{
 			unsafe {
-				::arch::debug::puts( s );
+				crate::arch::debug::puts( s );
 			}
 		}
 		Ok( () )
 	}
 }
 
+/// A very primitive logging macro
+///
+/// Obtains a logger instance (locking the log channel) with the current module name passed
+/// then passes the standard format! arguments to it
+macro_rules! log{
+	( $($arg:tt)* ) => ({
+		// Import the Writer trait (required by write!)
+		use core::fmt::Write;
+		let _ = write!(&mut crate::logging::Writer::get(module_path!()), $($arg)*);
+	})
+}

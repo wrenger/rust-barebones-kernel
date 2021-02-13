@@ -1,15 +1,4 @@
-/*
- * Rust BareBones OS
- * - By John Hodge (Mutabah/thePowersGang) 
- *
- * unwind.rs
- * - Stack unwind (panic) handling
- *
- * == LICENCE ==
- * This code has been put into the public domain, there are no restrictions on
- * its use, and the author takes no liability.
- */
-
+/// Debug output for rust panics.
 #[panic_handler]
 pub fn panic_implementation(info: &::core::panic::PanicInfo) -> !
 {
@@ -70,4 +59,3 @@ pub fn _Unwind_Resume()
 {
 	loop{}
 }
-

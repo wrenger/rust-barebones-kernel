@@ -1,14 +1,3 @@
-/*
- * Rust BareBones OS
- * - By John Hodge (Mutabah/thePowersGang) 
- *
- * arch/x86/x86_io.rs
- * - Support for the x86 IO bus
- *
- * == LICENCE ==
- * This code has been put into the public domain, there are no restrictions on
- * its use, and the author takes no liability.
- */
 #![allow(dead_code)]	// < This sample doesn't use them, but you might :)
 
 // NOTE: This code uses "{dx}N" as a register specifier. I _believe_ the N means (8-bit immediate)
@@ -56,4 +45,3 @@ pub unsafe fn inl(port: u16) -> u32
 	llvm_asm!("inl $1, $0" : "={eax}"(ret) : "{dx}N"(port));
 	return ret;
 }
-

@@ -8,10 +8,16 @@
 	"features": "-mmx,-sse,+soft-float",
 	"os": "tifflin",
 	"arch": "x86_64",
-		"linker-flavor": "ld",
-		"pre-link-args": { "ld": ["-m64"] },
-		"no-compiler-rt": true,
-		"disable-redzone": true,
-		"eliminate-frame-pointer": false,
-	"morestack": false
+	"linker": "rust-lld",
+	"linker-flavor": "ld.lld",
+	"pre-link-args": {
+		"ld.lld": [
+			"--script=src/arch/x86_64/link.ld"
+		]
+	},
+	"no-compiler-rt": true,
+	"disable-redzone": true,
+	"eliminate-frame-pointer": false,
+	"morestack": false,
+	"executables": true
 }

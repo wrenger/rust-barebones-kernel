@@ -1,9 +1,2 @@
-.*
-
-/Kernel/target
-
-/*.dsm
-/*.bin
-/*.bin.elf64
-/*.tar.gz
-
+/target/
+Cargo.lock
