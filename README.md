@@ -6,7 +6,7 @@ This is designed to be a rust equivalent of the OSDev.org Bare\_Bones article, p
 ## Requirements
 
 * `rustup` and `cargo`: [https://www.rust-lang.org/learn/get-started](https://www.rust-lang.org/learn/get-started)
-* An up to date `nightly-i686-unknown-linux-gnu` toolchain
+* An up to date `nightly-i686-unknown-linux-gnu` / `nightly-x86_64-unknown-linux-gnu` or `nightly-aarch64-unknown-linux-gnu` toolchain
 * The `rust-src` component, because we have a custom target:
     * `rustup component add rust-src`
 * QEMU for i386 or x86_64
@@ -20,19 +20,19 @@ This is designed to be a rust equivalent of the OSDev.org Bare\_Bones article, p
 
 ## Building
 
-### 32-bit
+### x86 32-bit
 
 Build with cargo:
 ```bash
-# configure the toolchain to be used (only necessary on the first time)
-rustup override set nightly-i686-unknown-linux-gnu
-# build for the custom i686 target
-cargo build --target src/arch/i686/i686-unknown-kernel.json
+# install the toolchain (only necessary on the first time)
+rustup toolchain add nightly-i686-unknown-linux-gnu
+# build for the custom x86 target
+cargo build --target src/arch/x86/x86-unknown-kernel.json
 ```
 
 Run with qemu:
 ```bash
-qemu-system-i386 -serial stdio -kernel target/i686-unknown-kernel/debug/rust-barebones-kernel
+qemu-system-i386 -serial stdio -kernel target/x86-unknown-kernel/debug/rust-barebones-kernel
 ```
 
 You should see a
@@ -43,12 +43,12 @@ You should see a
 
 print to the console.
 
-### 64-bit
+### x86 64-bit
 
 Build with cargo:
 ```bash
-# configure the toolchain to be used (only necessary on the first time)
-rustup override set nightly-x86_64-unknown-linux-gnu
+# install the toolchain (only necessary on the first time)
+rustup toolchain add nightly-x86_64-unknown-linux-gnu
 # build for the custom x86_64 target
 cargo build --target src/arch/x86_64/x86_64-unknown-kernel.json
 # Convert to 32bit elf so that the bios can load it
