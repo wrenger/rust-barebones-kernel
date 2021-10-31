@@ -14,12 +14,18 @@ pub mod arch;
 #[cfg(target_arch = "x86")]
 #[path = "arch/x86/mod.rs"]
 pub mod arch;
+#[cfg(target_arch = "aarch64")]
+#[path = "arch/aarch64/mod.rs"]
+pub mod arch;
 
 // Startup code
 #[cfg(target_arch = "x86_64")]
 global_asm!(include_str!("arch/x86_64/start.s"));
 #[cfg(target_arch = "x86")]
 global_asm!(include_str!("arch/x86/start.s"));
+#[cfg(target_arch = "aarch64")]
+global_asm!(include_str!("arch/aarch64/start.s"));
+
 
 /// Exception handling (panic)
 pub mod unwind;
