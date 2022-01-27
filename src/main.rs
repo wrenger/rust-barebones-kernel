@@ -1,8 +1,8 @@
 #![feature(panic_info_message)] //< Panic handling
-#![feature(llvm_asm)] //< As a kernel, we need inline assembly
-#![feature(global_asm)]
 #![no_std]
 #![no_main]
+
+use core::arch::{asm, global_asm};
 
 #[macro_use]
 mod logging;
@@ -20,20 +20,22 @@ pub mod arch;
 
 // Startup code
 #[cfg(target_arch = "x86_64")]
-global_asm!(include_str!("arch/x86_64/start.s"));
+global_asm!(include_str!("arch/x86_64/start.s"), options(att_syntax));
 #[cfg(target_arch = "x86")]
-global_asm!(include_str!("arch/x86/start.s"));
+global_asm!(include_str!("arch/x86/start.s"), options(att_syntax));
 #[cfg(target_arch = "aarch64")]
 global_asm!(include_str!("arch/aarch64/start.s"));
-
 
 /// Exception handling (panic)
 pub mod unwind;
 
 // Kernel entrypoint (called by arch/<foo>/start.s)
 #[no_mangle]
-pub fn kmain() {
-	log!("Hello world! 1={}", 1);
+pub fn kmain() -> ! {
+    unsafe { arch::debug::puts("hello world 0\n") };
+    unsafe { asm!("nop") };
 
-	loop {}
+    log!("hello world 1");
+
+    loop {}
 }

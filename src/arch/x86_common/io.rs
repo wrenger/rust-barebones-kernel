@@ -1,47 +1,41 @@
-#![allow(dead_code)]	// < This sample doesn't use them, but you might :)
+#![allow(dead_code)] // < This sample doesn't use them, but you might :)
 
 // NOTE: This code uses "{dx}N" as a register specifier. I _believe_ the N means (8-bit immediate)
 
+use core::arch::asm;
+
 /// Write a byte to the specified port
-pub unsafe fn outb(port: u16, val: u8)
-{
-	llvm_asm!("outb $0, $1" : : "{al}"(val), "{dx}N"(port));
+pub unsafe fn outb(port: u16, val: u8) {
+    asm!("outb dx", in("dx") port, in("al") val);
 }
 
 /// Read a single byte from the specified port
-pub unsafe fn inb(port: u16) -> u8
-{
-	let ret : u8;
-	// An alternative is this: BUT it can't handle 8-bit literals
-	// asm!("in al, dx", out("al") ret, in("dx") port, options(preserves_flags, nomem, nostack));
-	llvm_asm!("inb $1, $0" : "={al}"(ret) : "{dx}N"(port));
-	return ret;
+pub unsafe fn inb(port: u16) -> u8 {
+    let mut ret: u8;
+    asm!("inb dx", in("dx") port, out("al") ret);
+    return ret;
 }
 
 /// Write a word (16-bits) to the specified port
-pub unsafe fn outw(port: u16, val: u16)
-{
-	llvm_asm!("outw $0, $1" : : "{ax}"(val), "{dx}N"(port));
+pub unsafe fn outw(port: u16, val: u16) {
+    asm!("outw dx, ax", in("dx") port, in("ax") val);
 }
 
 /// Read a word (16-bits) from the specified port
-pub unsafe fn inw(port: u16) -> u16
-{
-	let ret : u16;
-	llvm_asm!("inw $1, $0" : "={ax}"(ret) : "{dx}N"(port));
-	return ret;
+pub unsafe fn inw(port: u16) -> u16 {
+    let mut ret: u16;
+    asm!("inb dx, ax", in("dx") port, out("ax") ret);
+    return ret;
 }
 
 /// Write a long/double-word (32-bits) to the specified port
-pub unsafe fn outl(port: u16, val: u32)
-{
-	llvm_asm!("outl $0, $1" : : "{eax}"(val), "{dx}N"(port));
+pub unsafe fn outl(port: u16, val: u32) {
+    asm!("outw dx, eax", in("dx") port, in("eax") val);
 }
 
 /// Read a long/double-word (32-bits) from the specified port
-pub unsafe fn inl(port: u16) -> u32
-{
-	let ret : u32;
-	llvm_asm!("inl $1, $0" : "={eax}"(ret) : "{dx}N"(port));
-	return ret;
+pub unsafe fn inl(port: u16) -> u32 {
+    let mut ret: u32;
+    asm!("inb dx, eax", in("dx") port, out("eax") ret);
+    return ret;
 }

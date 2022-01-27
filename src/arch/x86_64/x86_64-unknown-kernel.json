@@ -1,23 +1,20 @@
 {
-	"cpu": "x86-64",
+	"arch": "x86_64",
 	"data-layout": "e-m:e-i64:64-f80:128-n8:16:32:64-S128",
+	"disable-redzone": true,
+	"executables": true,
+	"features": "-mmx,-sse,+soft-float",
+	"linker-flavor": "ld.lld",
+	"linker": "rust-lld",
 	"llvm-target": "x86_64-unknown-none",
+	"os": "none",
+	"panic-strategy": "abort",
+	"target-c-int-width": "32",
 	"target-endian": "little",
 	"target-pointer-width": "64",
-	"target-c-int-width": "32",
-	"features": "-mmx,-sse,+soft-float",
-	"os": "tifflin",
-	"arch": "x86_64",
-	"linker": "rust-lld",
-	"linker-flavor": "ld.lld",
 	"pre-link-args": {
 		"ld.lld": [
 			"--script=src/arch/x86_64/link.ld"
 		]
-	},
-	"no-compiler-rt": true,
-	"disable-redzone": true,
-	"eliminate-frame-pointer": false,
-	"morestack": false,
-	"executables": true
+	}
 }
